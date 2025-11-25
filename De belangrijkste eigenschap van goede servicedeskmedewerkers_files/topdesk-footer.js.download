@@ -1,0 +1,111 @@
+var _____WB$wombat$assign$function_____=function(name){return (self._wb_wombat && self._wb_wombat.local_init && self._wb_wombat.local_init(name))||self[name];};if(!self.__WB_pmw){self.__WB_pmw=function(obj){this.__WB_source=obj;return this;}}{
+let window = _____WB$wombat$assign$function_____("window");
+let self = _____WB$wombat$assign$function_____("self");
+let document = _____WB$wombat$assign$function_____("document");
+let location = _____WB$wombat$assign$function_____("location");
+let top = _____WB$wombat$assign$function_____("top");
+let parent = _____WB$wombat$assign$function_____("parent");
+let frames = _____WB$wombat$assign$function_____("frames");
+let opens = _____WB$wombat$assign$function_____("opens");
+"use strict";
+
+var FooterInfo = FooterInfo || {};
+
+FooterInfo = function (contact_info, translation, social_media){
+    //properties
+    this.contactInfo = contact_info;   //Array
+    this.translation = translation;    //Object
+    this.socialInfo = social_media;    //Array
+
+    if (typeof this.contactInfo !== 'undefined' && this.contactInfo.length > 0){
+        this.insertFooterInfo();
+        this.insertLegalUrl();
+    }
+
+    if (!this.isEmpty(this.contactInfo)){
+        this.insertTranslation();
+    }
+    
+    if (!this.isEmpty(this.socialInfo)){
+        this.insertSocialMediaInfo();
+    }
+}
+
+//Methods
+
+FooterInfo.prototype.insertFooterInfo = function (){
+    if ((this.contactInfo).length > 1){
+        this.insertFootersInfo ();
+    }else{
+        $(".footer_branch_name").html(this.contactInfo[0]["name"]);
+        $(".footer_branch_tel").attr("href","tel:" + this.contactInfo[0]["shortTel"]);
+        $(".footer_branch_tel").html(this.contactInfo[0]["tel"]);
+        $(".footer_branch_mail").attr("href","mailto:" +  this.contactInfo[0]["email"]);
+        $(".footer_branch_mail").html(this.contactInfo[0]["email"]);
+    }
+}
+
+FooterInfo.prototype.insertFootersInfo = function (){
+    var i = 0;
+    var branchesInfo = "";
+    for (i; i< (this.contactInfo).length; i++) {
+        branchesInfo += '<li class="center"><p>';
+        branchesInfo += '<strong class="footer_branch_name">'+ this.contactInfo[i]["name"] +'</strong>';
+        branchesInfo += '<br><a class="footer_branch_tel" href="tel:+'+ this.contactInfo[i]["shortTel"] +'">'+ this.contactInfo[i]["tel"] +'</a>';
+        branchesInfo += '<br><a class="footer_branch_mail" href="mailto:'+  this.contactInfo[i]["email"] +'">'+ this.contactInfo[i]["email"] +'</a>';
+        branchesInfo += '</p></li>';
+
+    }
+
+    $(".branchesList").html(branchesInfo);
+}
+
+FooterInfo.prototype.insertLegalUrl = function (){
+    $('#cookie-policy-link a').attr("href", this.contactInfo[0]["cookie_policy_url"]);
+    $('#privacy-policy-link a').attr("href", this.contactInfo[0]["privacy_policy_url"]);
+
+}
+
+FooterInfo.prototype.insertTranslation = function (){
+    for (var key in this.translation){
+        $("."+key).text(this.translation[key]);
+    }
+}
+
+FooterInfo.prototype.insertSocialMediaInfo = function (){
+        $(".footer-twitter-url").attr("href", this.socialInfo['twitter_url']);
+        $(".footer-linkedin-url").attr("href", this.socialInfo['linkedin_url']);        
+        $(".footer-facebook-url").attr("href", this.socialInfo['facebook_url']);    
+    
+};
+
+FooterInfo.prototype.isEmpty = function(obj) {
+  for (var key in obj){
+        if(obj.hasOwnProperty(key)){
+          return false;
+        }  
+    }
+    return true;
+}
+}
+/*
+     FILE ARCHIVED ON 10:29:54 Sep 01, 2021 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 07:20:41 Nov 25, 2025.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 0.997
+  exclusion.robots: 0.04
+  exclusion.robots.policy: 0.024
+  esindex: 0.015
+  cdx.remote: 8.877
+  LoadShardBlock: 148.274 (3)
+  PetaboxLoader3.datanode: 145.319 (5)
+  PetaboxLoader3.resolve: 96.706 (2)
+  load_resource: 110.58
+  loaddict: 34.714
+*/

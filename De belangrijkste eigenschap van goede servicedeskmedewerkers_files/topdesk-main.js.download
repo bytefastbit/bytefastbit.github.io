@@ -1,0 +1,224 @@
+var _____WB$wombat$assign$function_____=function(name){return (self._wb_wombat && self._wb_wombat.local_init && self._wb_wombat.local_init(name))||self[name];};if(!self.__WB_pmw){self.__WB_pmw=function(obj){this.__WB_source=obj;return this;}}{
+let window = _____WB$wombat$assign$function_____("window");
+let self = _____WB$wombat$assign$function_____("self");
+let document = _____WB$wombat$assign$function_____("document");
+let location = _____WB$wombat$assign$function_____("location");
+let top = _____WB$wombat$assign$function_____("top");
+let parent = _____WB$wombat$assign$function_____("parent");
+let frames = _____WB$wombat$assign$function_____("frames");
+let opens = _____WB$wombat$assign$function_____("opens");
+$(document).ready(function (){
+        
+    /* 
+        Vreselijk ;=)
+        Below is for the Custom Module: TOP Row Hider
+        - Adds css class 'hidden', to hide a row. 
+        The custom module 'TOP Row Hider' can be used (multiple times) in a template like the TOP Webinar Overview Template.
+        This module inserts an html element when the checkbox is true with id = topRowHider.
+        The row in the template also need the css class topRow Hider.
+        Using this two-step chaining ( .parents and .closest ) because there is a lot of row-nesting going on in some templates.
+        - TD
+    */
+    $("input[id='topRowHider']").parents(".topRowHider").closest(".row-fluid-wrapper").addClass("hidden");
+        
+    // MC-2432
+    // Because Hubspot only provides the option for one URL
+    var pathname = window.location.pathname; 
+    
+    if(pathname == "/nl"){
+        $("#twitter").attr("href","https://web.archive.org/web/20210901103213/https://twitter.com/TOPdesk_NL");
+        $("#facebook").attr("href","https://web.archive.org/web/20210901103213/https://www.facebook.com/TOPdeskNL/");
+    } else if (pathname == "/de") {
+        $("#twitter").attr("href","https://web.archive.org/web/20210901103213/https://twitter.com/TOPdesk_DE");
+    }     
+    
+});
+
+
+function getCountry(){
+    if ($('#countryKey').length){
+        var office =  $('#countryKey').val();
+        return (office)? office : "uk";
+    } else {
+        var url = window.location.href;
+        url = url.split("/");
+        return url[Constants.countryUrlPosition];
+    }
+}
+
+function changeURL (object, url){
+    object.attr('href', url);
+}
+
+function addCSS(filename){
+ var head = document.getElementsByTagName('head')[0];
+
+ var css = document.createElement('link');
+ css.href = filename;
+ css.type = 'text/css';
+ css.rel = 'stylesheet';
+
+ head.append(css);
+}
+
+/* Whitelist form fields for Hotjar. */
+function whitelistfields(){
+    $("input, select").addClass("data-hj-whitelist");  
+}
+setTimeout(whitelistfields, 3000);
+
+//new Analytics scripts
+function insertGAScript (tracking_id){
+
+	// Default Global Tracker. We always send it except when the Variable Tracker is Global too
+  	var tracking_id_global = 'UA-186791-8';
+    var tracking_id_recruitment = 'UA-186791-2';
+    
+  	if( tracking_id != tracking_id_global && tracking_id != tracking_id_recruitment){
+    // tracking id on page is not equal to the global tracking id or global recruitment id
+    var GAScript = "<script async src='https://web.archive.org/web/20210901103213/https://www.googletagmanager.com/gtag/js?id=UA-186791-8'></script>";
+    GAScript += "<script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);}  gtag('js', new Date());";       
+    GAScript += "gtag('config', '" + tracking_id + "', {'groups': 'default' });";
+    GAScript += "gtag('config', '" + tracking_id_global + "', {'groups': 'default' });";  
+    GAScript += "gtag('config', 'AW-972041840', {'groups': 'adwords' });";
+    GAScript += "gtag('config', 'AW-969900586', {'groups': 'adwords' });";  
+    GAScript += "gtag('config', 'AW-963118534', {'groups': 'adwords' });";
+    GAScript += "gtag('config', 'AW-920852238', {'groups': 'adwords' });";  
+    GAScript += "gtag('config', 'AW-966697684', {'groups': 'adwords' });";
+    GAScript += "gtag('config', 'AW-970130038', {'groups': 'adwords' });"; 
+    GAScript += "gtag('config', 'AW-956202852', {'groups': 'adwords' });";
+    GAScript += "gtag('config', 'AW-960894396', {'groups': 'adwords' });";     
+  	GAScript += "</script>";
+ 
+    $('head').prepend(GAScript);
+
+    }
+  
+    if( tracking_id == tracking_id_global ){
+    // tracking id on page is the same as the global tracking id
+    var GAScript_global = "<script async src='https://web.archive.org/web/20210901103213/https://www.googletagmanager.com/gtag/js?id=UA-186791-8'></script>";
+    GAScript_global += "<script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date());";       
+    GAScript_global += "gtag('config', '" + tracking_id_global + "', {'groups': 'default' });";  
+    GAScript_global += "gtag('config', 'AW-972041840', {'groups': 'adwords' });";
+    GAScript_global += "gtag('config', 'AW-969900586', {'groups': 'adwords' });";  
+    GAScript_global += "gtag('config', 'AW-963118534', {'groups': 'adwords' });";
+    GAScript_global += "gtag('config', 'AW-920852238', {'groups': 'adwords' });";  
+    GAScript_global += "gtag('config', 'AW-966697684', {'groups': 'adwords' });";
+    GAScript_global += "gtag('config', 'AW-970130038', {'groups': 'adwords' });"; 
+    GAScript_global += "gtag('config', 'AW-956202852', {'groups': 'adwords' });";
+    GAScript_global += "gtag('config', 'AW-960894396', {'groups': 'adwords' });";    
+  	GAScript_global += "</script>";  
+      
+      $('head').prepend(GAScript_global); 
+
+    }
+    
+    if( tracking_id == tracking_id_recruitment ){
+    // tracking id on page is the same as the recruitment tracking id
+    var GAScript_recruitment = "<script async src='https://web.archive.org/web/20210901103213/https://www.googletagmanager.com/gtag/js?id=UA-186791-2'></script>";
+    GAScript_recruitment += "<script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date());";       
+    GAScript_recruitment += "gtag('config', '" + tracking_id_recruitment + "', {'groups': 'default' });";      
+  	GAScript_recruitment += "</script>";  
+      
+      $('head').prepend(GAScript_recruitment); 
+
+    }
+}
+  /*  Old Google analytics script 2782019 
+  	// Default Global Tracker. We always send it except when the Variable Tracker is Global too
+  	var tracking_id_global = 'UA-186791-8';
+    
+  	if( tracking_id != tracking_id_global ){
+    // tracking id on page is not equal to the global tracking id
+    var GAScript = "<script async src='https://web.archive.org/web/20210901103213/https://www.googletagmanager.com/gtag/js?id=UA-186791-8'></script>";
+    GAScript += "<script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);}  gtag('js', new Date());";       
+    GAScript += "gtag('config', '" + tracking_id + "', {'groups': 'default' });";
+    GAScript += "gtag('config', '" + tracking_id_global + "', {'groups': 'default' });";  
+    GAScript += "gtag('config', 'AW-972041840', {'groups': 'adwords' });";
+    GAScript += "gtag('config', 'AW-969900586', {'groups': 'adwords' });";  
+    GAScript += "gtag('config', 'AW-963118534', {'groups': 'adwords' });";
+    GAScript += "gtag('config', 'AW-920852238', {'groups': 'adwords' });";  
+    GAScript += "gtag('config', 'AW-966697684', {'groups': 'adwords' });";
+    GAScript += "gtag('config', 'AW-970130038', {'groups': 'adwords' });"; 
+    GAScript += "gtag('config', 'AW-956202852', {'groups': 'adwords' });";
+    GAScript += "gtag('config', 'AW-960894396', {'groups': 'adwords' });";     
+  	GAScript += "</script>";
+ 
+    $('head').prepend(GAScript);
+
+    }
+  
+    if( tracking_id == tracking_id_global ){
+    // tracking id on page is the same as the global tracking id
+    var GAScript_global = "<script async src='https://web.archive.org/web/20210901103213/https://www.googletagmanager.com/gtag/js?id=UA-186791-8'></script>";
+    GAScript_global += "<script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date());";       
+    GAScript_global += "gtag('config', '" + tracking_id_global + "', {'groups': 'default' });";  
+    GAScript_global += "gtag('config', 'AW-972041840', {'groups': 'adwords' });";
+    GAScript_global += "gtag('config', 'AW-969900586', {'groups': 'adwords' });";  
+    GAScript_global += "gtag('config', 'AW-963118534', {'groups': 'adwords' });";
+    GAScript_global += "gtag('config', 'AW-920852238', {'groups': 'adwords' });";  
+    GAScript_global += "gtag('config', 'AW-966697684', {'groups': 'adwords' });";
+    GAScript_global += "gtag('config', 'AW-970130038', {'groups': 'adwords' });"; 
+    GAScript_global += "gtag('config', 'AW-956202852', {'groups': 'adwords' });";
+    GAScript_global += "gtag('config', 'AW-960894396', {'groups': 'adwords' });";    
+  	GAScript_global += "</script>";  
+      
+      $('head').prepend(GAScript_global); 
+
+    }
+}
+*/
+
+/* Old Google Analytics Scripts 1432019
+function insertGAScript (GA, dimension){
+    
+  	// Variable Tracker set by marketeer
+    var GAScript = "<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//web.archive.org/web/20210901103213/https://www.google-analytics.com/analytics.js','ga');";
+    GAScript += "ga('create', '" + GA + "', 'auto');";       
+    GAScript += "ga('set', 'dimension1', '"+ dimension + "');";
+    GAScript += "ga('require', 'displayfeatures');";  
+    GAScript += "ga('require', 'linkid');";   
+    GAScript += "ga('send', 'pageview');";     
+  	GAScript += "</script>";
+ 
+    $('head').prepend(GAScript);
+
+  	// Default Global Tracker. We always send it except when the Variable Tracker is Global too
+  	var GA_global = 'UA-186791-8';
+  
+    if( GA != GA_global ){
+  
+      var GAScript_global = "<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//web.archive.org/web/20210901103213/https://www.google-analytics.com/analytics.js','ga');";
+      GAScript_global += "ga('create', '" + GA_global + "' , 'auto', 'globaltrack');"; 
+      GAScript_global += "ga('globaltrack.set', 'dimension1', '"+ dimension + "');";    
+      GAScript_global += "ga('globaltrack.require', 'displayfeatures');";  
+      GAScript_global += "ga('globaltrack.require', 'linkid');";    
+      GAScript_global += "ga('globaltrack.send', 'pageview');";       
+      GAScript_global += "</script>";  
+      
+      $('head').prepend(GAScript_global); 
+    }
+}
+*/
+}
+/*
+     FILE ARCHIVED ON 10:32:13 Sep 01, 2021 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 07:20:42 Nov 25, 2025.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 0.651
+  exclusion.robots: 0.023
+  exclusion.robots.policy: 0.01
+  esindex: 0.012
+  cdx.remote: 11.165
+  LoadShardBlock: 446.833 (3)
+  PetaboxLoader3.datanode: 328.435 (5)
+  PetaboxLoader3.resolve: 84.518 (2)
+  load_resource: 94.662
+  loaddict: 38.866
+*/

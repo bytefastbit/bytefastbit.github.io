@@ -1,0 +1,90 @@
+var _____WB$wombat$assign$function_____=function(name){return (self._wb_wombat && self._wb_wombat.local_init && self._wb_wombat.local_init(name))||self[name];};if(!self.__WB_pmw){self.__WB_pmw=function(obj){this.__WB_source=obj;return this;}}{
+let window = _____WB$wombat$assign$function_____("window");
+let self = _____WB$wombat$assign$function_____("self");
+let document = _____WB$wombat$assign$function_____("document");
+let location = _____WB$wombat$assign$function_____("location");
+let top = _____WB$wombat$assign$function_____("top");
+let parent = _____WB$wombat$assign$function_____("parent");
+let frames = _____WB$wombat$assign$function_____("frames");
+let opens = _____WB$wombat$assign$function_____("opens");
+"use strict";
+var insertScript =  function (country) {
+    this.country = country;
+    this.scriptCode = "";
+    
+    //Bing parameters
+    this.bingAccountNumber;
+    this.bingAccountFlag = true; // Set to True because the Bing number is the same for every country.
+    this.bingAccountNumber = '5436513'; 
+    
+    //Yahoo parameters
+    this.yahooGeminiParameters;
+    this.yahooGeminiFlag = false;
+    
+    //Other flags
+    this.leadForensicsFlag = false;
+
+    this.getInfo();
+}
+ 
+insertScript.prototype.getInfo = function() {
+     switch(this.country) {
+        case 'us':
+
+            this.yahooGeminiParameters = "{'projectId':'10000','properties':{'pixelId':'10013215'}}"; // US account paramaters for Yahoo
+            this.yahooGeminiFlag = true;
+            
+            break;
+        case 'uk':
+                this.leadForensicsFlag = true;
+                break;
+        default: break;
+    }
+    
+    this.addScript();
+};
+
+
+insertScript.prototype.addScript = function() {
+
+    if(this.bingAccountFlag) {
+        this.scriptCode += '<!-- BING UTM --><script>(function(w,d,t,r,u){var f,n,i;w[u]=w[u]||[],f=function(){var o={ti:"5436513"};o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad")},n=d.createElement(t),n.src=r,n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&s!=="loaded"&&s!=="complete"||(f(),n.onload=n.onreadystatechange=null)},i=d.getElementsByTagName(t)[0],i.parentNode.insertBefore(n,i)})(window,document,"script","//web.archive.org/web/20210901102856/https://bat.bing.com/bat.js","uetq");</script>';
+        this.scriptCode += '<noscript><img src="//web.archive.org/web/20210901102856/https://bat.bing.com/action/0?ti=5436513&Ver=2" height="0" width="0" style="display:none; visibility: hidden;" /></noscript>';
+    }
+      
+    if(this.yahooGeminiFlag) {
+        this.scriptCode += '<!-- Yahoo script --><script type="application/javascript">(function(w,d,t,r,u){w[u]=w[u]||[];w[u].push({\'projectId\':\'10000\',\'properties\':{\'pixelId\':\'10013215\'}});var s=d.createElement(t);s.src=r;s.async=true;s.onload=s.onreadystatechange=function(){var y,rs=this.readyState,c=w[u];if(rs&&rs!="complete"&&rs!="loaded"){return}try{y=YAHOO.ywa.I13N.fireBeacon;w[u]=[];w[u].push=function(p){y([p])};y(c)}catch(e){}};var scr=d.getElementsByTagName(t)[0],par=scr.parentNode;par.insertBefore(s,scr)})(window,document,"script","https://web.archive.org/web/20210901102856/https://s.yimg.com/wi/ytc.js","dotq");</script>';
+        this.scriptCode += '<noscript><img src="https://web.archive.org/web/20210901102856/https://sp.analytics.yahoo.com/spp.pl?a=10000&.yp=10013215"/></noscript>';
+    }
+    
+    if(this.leadForensicsFlag){
+        this.scriptCode += "<!-- LeadForensics --><script type='text/javascript' src='https://web.archive.org/web/20210901102856/http://www.lansrv020.com/js/86453.js'></script>";
+        this.scriptCode += "<noscript><img src='https://web.archive.org/web/20210901102856/http://www.lansrv020.com/86453.png' style='visibility: hidden; position: fixed'/></noscript><!-- End LeadForensics -->";
+    }
+    
+
+    $('body').append(this.scriptCode);
+};
+
+}
+/*
+     FILE ARCHIVED ON 10:28:56 Sep 01, 2021 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 07:20:41 Nov 25, 2025.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 0.978
+  exclusion.robots: 0.042
+  exclusion.robots.policy: 0.026
+  esindex: 0.016
+  cdx.remote: 9.206
+  LoadShardBlock: 81.702 (3)
+  PetaboxLoader3.datanode: 148.4 (5)
+  load_resource: 131.041
+  PetaboxLoader3.resolve: 52.846
+  loaddict: 30.444
+*/

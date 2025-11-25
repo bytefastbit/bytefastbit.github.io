@@ -1,0 +1,130 @@
+var _____WB$wombat$assign$function_____=function(name){return (self._wb_wombat && self._wb_wombat.local_init && self._wb_wombat.local_init(name))||self[name];};if(!self.__WB_pmw){self.__WB_pmw=function(obj){this.__WB_source=obj;return this;}}{
+let window = _____WB$wombat$assign$function_____("window");
+let self = _____WB$wombat$assign$function_____("self");
+let document = _____WB$wombat$assign$function_____("document");
+let location = _____WB$wombat$assign$function_____("location");
+let top = _____WB$wombat$assign$function_____("top");
+let parent = _____WB$wombat$assign$function_____("parent");
+let frames = _____WB$wombat$assign$function_____("frames");
+let opens = _____WB$wombat$assign$function_____("opens");
+/* Script for Form-Helptext, the info icons behind the fields  */
+$(document).ready(function(){  
+  
+
+    
+    $('body').on('mouseover', '.hs-form-help', function(){
+        var container = $(this).parent().parent();
+       ($(container).find('.hs-field-desc')).css("visibility", "visible");
+    });
+    
+    $('body').on('mouseout', '.hs-form-help', function(){
+       $('.hs-field-desc').css("visibility", "hidden");
+    });
+    
+    $('.hs-form-field').ready( function (){
+        setTimeout(function() {
+            $('.hs-form-field').each( function(){
+                if(($(this).find('legend')).text() !== "" ){
+                  var help ='<span class="hs-form-help"><i class="fa fa-question-circle" aria-hidden="true"></i></span>';
+                  ($(this).find('label')).first().prepend(help);   
+                }
+            });               
+        }, 500);
+    });
+
+
+    $('body').on('hsvalidatedsubmit', '.hs-form', function(e) {
+        e.preventDefault();
+        var form = $(this);
+    
+        gaEventLabel (form);
+        bingEventLabel (form);
+    }); 
+    
+    
+ 
+
+    // mc-3516
+    function gaEventLabel (form){
+
+            // Find the hidden field with name 'google_analytics_event_label'. 
+            // This field can be added to your form via the editor
+            var labelname = form.find('[name=google_analytics_event_label]');       
+
+
+            // When found the object length is larger than 0. 
+            if (labelname.length > 0) {                                 
+                // Get the value of the label
+                var labelvalue = $('input[name="google_analytics_event_label"]').val();
+                //console.log(labelvalue);
+              gtag('event', 'Submitted', { 
+                    'send_to': 'default',
+                    'event_category': 'Forms',
+                    'event_label': labelvalue 
+                });
+
+            }  
+              /* Old events sender 14319
+                // Send the event to google analytics.
+                ga('send', 'event', { 
+                    eventCategory: 'Forms', 
+                    eventAction: 'Submitted', 
+                    eventLabel: labelvalue 
+                });
+
+                ga('globaltrack.send', 'event', { 
+                    eventCategory: 'Forms', 
+                    eventAction: 'Submitted', 
+                    eventLabel: labelvalue 
+                });
+            }
+                */
+    }
+
+    // mc-4149
+    function bingEventLabel (form){
+
+            // Find the hidden field with name 'google_analytics_event_label'. 
+            // This field can be added to your form via the editor
+            var labelname = form.find('[name=google_analytics_event_label]');       
+
+
+            // When found the object length is larger than 0. 
+            if (labelname.length > 0) {                                 
+                // Get the value of the label
+                var labelvalue = $('input[name="google_analytics_event_label"]').val();
+
+                // Send the event to bing.
+                window.uetq = window.uetq || [];
+                window.uetq.push({ 'ec':'Forms', 'ea':'Submitted', 'el':labelvalue }); 
+
+            };
+
+    };
+
+
+
+
+}); // end doc rdy
+}
+/*
+     FILE ARCHIVED ON 10:30:02 Sep 01, 2021 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 07:20:41 Nov 25, 2025.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  captures_list: 1.261
+  exclusion.robots: 0.043
+  exclusion.robots.policy: 0.031
+  esindex: 0.011
+  cdx.remote: 25.54
+  LoadShardBlock: 254.099 (3)
+  PetaboxLoader3.datanode: 311.786 (5)
+  PetaboxLoader3.resolve: 215.18 (2)
+  load_resource: 297.813
+  loaddict: 116.481
+*/
