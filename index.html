@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kerberos Authenticatie Simulator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 30px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .step-container {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        
+        .step-title {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus, input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #5568d3;
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .result-box {
+            background: #e8f4f8;
+            border: 2px solid #4a90e2;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 15px;
+            word-break: break-all;
+        }
+        
+        .result-label {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .result-value {
+            font-family: 'Courier New', monospace;
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 5px;
+            font-size: 13px;
+        }
+        
+        .info-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border: 1px solid #28a745;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .user-list {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        
+        .diagram {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+        }
+        
+        .arrow {
+            color: #667eea;
+            font-size: 24px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Kerberos Authenticatie Simulator</h1>
+        <p class="subtitle">Voor opdracht Security - Graafschap College Doetinchem</p>
+        
+        <div class="info-box">
+            <strong>ℹ️ Beschikbare gebruikers:</strong>
+            <div class="user-list">
+                • <strong>Alice</strong> - Wachtwoord: Zom3rVakanti3 (Hash: ae7ca446496f26dd714175867aadd9c3)<br>
+                • <strong>Bob</strong> - Wachtwoord: 8arcelona (Hash: dd45a1bbbccad6af6e6c52c562306e91)<br>
+                • <strong>Carol</strong> - Wachtwoord: @ppelfl@p21 (Hash: abbd4fcb409c6776e2fadb2f1c51dc04)
+            </div>
+        </div>
+
+        <!-- Stap 0: Wachtwoord Hash Genereren -->
+        <div class="step-container">
+            <div class="step-title">Stap 0 - Genereer MD5 Hash van je wachtwoord</div>
+            <div class="input-group">
+                <label for="password-hash">Voer een wachtwoord in om de MD5 hash te berekenen:</label>
+                <input type="text" id="password-hash" placeholder="Bijv: 8arcelona">
+            </div>
+            <button onclick="generateHash()">Bereken Hash</button>
+            <div id="hash-result" class="hidden result-box">
+                <div class="result-label">MD5 Hash:</div>
+                <div class="result-value" id="hash-value"></div>
+            </div>
+        </div>
+
+        <!-- Stap 1b: Gebruikersnaam invoeren -->
+        <div class="step-container">
+            <div class="step-title">Stap 1b - De gebruikersnaam wordt door de computerclient verstuurd naar de KDC</div>
+            <div class="input-group">
+                <label for="username">Gebruikersnaam:</label>
+                <input type="text" id="username" placeholder="Bijv: Bob" value="Bob">
+            </div>
+            <button onclick="sendUsername()">Verzenden naar KDC</button>
+        </div>
+
+        <!-- Stap 2: KDC Response -->
+        <div id="step2" class="step-container hidden">
+            <div class="step-title">Stap 2b - De KDC versleutelt een sessiesleutel met de hashwaarde van het wachtwoord</div>
+            
+            <div class="diagram">
+                <div>🖥️ Client</div>
+                <div class="arrow">⬇️</div>
+                <div>🔐 KDC (Key Distribution Center)</div>
+                <div class="arrow">⬇️</div>
+                <div>📦 Versleutelde data terug naar client</div>
+            </div>
+            
+            <div class="result-box">
+                <div class="result-label">Vercijferde sessiesleutel (versleuteld met wachtwoord-hash):</div>
+                <div class="result-value" id="encrypted-session-key"></div>
+            </div>
+            
+            <div class="result-box">
+                <div class="result-label">Ticket (versleuteld met service wachtwoord):</div>
+                <div class="result-value" id="ticket"></div>
+            </div>
+            
+            <div class="info-box" style="margin-top: 15px;">
+                <strong>📝 Noteer deze waardes in je werkblad!</strong><br>
+                De vercijferde sessiesleutel is Base64 gecodeerd en versleuteld met DES-ECB.<br>
+                De sleutel hiervoor is de MD5 hash van je wachtwoord.
+            </div>
+        </div>
+
+        <!-- Stap 2d: Sessiesleutel ontcijferen -->
+        <div id="step2d" class="step-container hidden">
+            <div class="step-title">Stap 2d - De computerclient ontcijfert de sessiesleutel met de hashwaarde van het wachtwoord</div>
+            
+            <div class="input-group">
+                <label for="password-decrypt">Voer je wachtwoord in om te ontcijferen:</label>
+                <input type="password" id="password-decrypt" placeholder="Bijv: 8arcelona">
+            </div>
+            <button onclick="decryptSessionKey()">Ontcijfer Sessiesleutel</button>
+            
+            <div id="decrypted-result" class="hidden success-box">
+                <div class="result-label">✅ Ontcijferde sessiesleutel:</div>
+                <div class="result-value" id="decrypted-session-key"></div>
+                <p style="margin-top: 10px;"><strong>Succes!</strong> Je hebt de sessiesleutel succesvol ontcijferd. Deze kan nu gebruikt worden voor verdere communicatie met de service.</p>
+            </div>
+            
+            <div id="decrypt-error" class="hidden" style="background: #f8d7da; border: 1px solid #dc3545; padding: 15px; border-radius: 6px; margin-top: 15px;">
+                <strong>❌ Fout wachtwoord!</strong> De ontcijfering is mislukt. Controleer je wachtwoord.
+            </div>
+        </div>
+
+        <!-- Stap 3: Volledig overzicht -->
+        <div id="step3" class="step-container hidden">
+            <div class="step-title">📊 Volledig Overzicht van het Kerberos Proces</div>
+            
+            <div style="background: white; padding: 15px; border-radius: 6px;">
+                <p><strong>1. Client → KDC:</strong> Gebruikersnaam "<span id="summary-username"></span>"</p>
+                <p><strong>2. KDC → Client:</strong> Versleutelde sessiesleutel + Ticket</p>
+                <p><strong>3. Client:</strong> Ontcijfert sessiesleutel met wachtwoord-hash</p>
+                <p><strong>4. Client → Service:</strong> Ticket + Authenticator (zou volgende stap zijn)</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+        // Database met gebruikers
+        const users = {
+            'Alice': {
+                password: 'Zom3rVakanti3',
+                hash: 'ae7ca446496f26dd714175867aadd9c3'
+            },
+            'Bob': {
+                password: '8arcelona',
+                hash: 'dd45a1bbbccad6af6e6c52c562306e91'
+            },
+            'Carol': {
+                password: '@ppelfl@p21',
+                hash: 'abbd4fcb409c6776e2fadb2f1c51dc04'
+            }
+        };
+
+        let currentSessionKey = '';
+        let currentUsername = '';
+        let encryptedSessionKey = '';
+
+        // Stap 0: Hash genereren
+        function generateHash() {
+            const password = document.getElementById('password-hash').value;
+            if (!password) {
+                alert('Voer een wachtwoord in!');
+                return;
+            }
+            
+            const hash = CryptoJS.MD5(password).toString();
+            document.getElementById('hash-value').textContent = hash;
+            document.getElementById('hash-result').classList.remove('hidden');
+        }
+
+        // Stap 1b: Gebruikersnaam versturen
+        function sendUsername() {
+            const username = document.getElementById('username').value.trim();
+            
+            if (!username) {
+                alert('Voer een gebruikersnaam in!');
+                return;
+            }
+
+            if (!users[username]) {
+                alert('Gebruiker niet gevonden! Gebruik Bob, Alice of Admin.');
+                return;
+            }
+
+            currentUsername = username;
+            
+            // Genereer sessiesleutel (16 karakters random)
+            currentSessionKey = generateRandomKey(16);
+            
+            // Versleutel sessiesleutel met DES-ECB met wachtwoord-hash
+            const userHash = users[username].hash;
+            const key = CryptoJS.enc.Hex.parse(userHash.substring(0, 16)); // Gebruik eerste 8 bytes (16 hex chars)
+            
+            const encrypted = CryptoJS.DES.encrypt(
+                currentSessionKey,
+                key,
+                {
+                    mode: CryptoJS.mode.ECB,
+                    padding: CryptoJS.pad.Pkcs7
+                }
+            );
+            
+            encryptedSessionKey = encrypted.toString(); // Base64
+            
+            // Genereer ticket (gesimuleerd)
+            const ticket = CryptoJS.MD5(username + currentSessionKey + Date.now()).toString();
+            
+            // Toon resultaten
+            document.getElementById('encrypted-session-key').textContent = encryptedSessionKey;
+            document.getElementById('ticket').textContent = ticket;
+            document.getElementById('step2').classList.remove('hidden');
+            document.getElementById('step2d').classList.remove('hidden');
+            document.getElementById('step3').classList.remove('hidden');
+            document.getElementById('summary-username').textContent = username;
+            
+            // Scroll naar resultaten
+            document.getElementById('step2').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Stap 2d: Sessiesleutel ontcijferen
+        function decryptSessionKey() {
+            const password = document.getElementById('password-decrypt').value;
+            
+            if (!password) {
+                alert('Voer je wachtwoord in!');
+                return;
+            }
+
+            const correctPassword = users[currentUsername].password;
+            
+            if (password !== correctPassword) {
+                document.getElementById('decrypt-error').classList.remove('hidden');
+                document.getElementById('decrypted-result').classList.add('hidden');
+                return;
+            }
+
+            // Bereken hash en ontcijfer
+            const hash = CryptoJS.MD5(password).toString();
+            const key = CryptoJS.enc.Hex.parse(hash.substring(0, 16));
+            
+            try {
+                const decrypted = CryptoJS.DES.decrypt(
+                    encryptedSessionKey,
+                    key,
+                    {
+                        mode: CryptoJS.mode.ECB,
+                        padding: CryptoJS.pad.Pkcs7
+                    }
+                );
+                
+                const decryptedText = decrypted.toString(CryptoJS.enc.Utf8);
+                
+                document.getElementById('decrypted-session-key').textContent = decryptedText;
+                document.getElementById('decrypted-result').classList.remove('hidden');
+                document.getElementById('decrypt-error').classList.add('hidden');
+            } catch (e) {
+                document.getElementById('decrypt-error').classList.remove('hidden');
+                document.getElementById('decrypted-result').classList.add('hidden');
+            }
+        }
+
+        // Helper functie om random key te genereren
+        function generateRandomKey(length) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+    </script>
+</body>
+</html>
