@@ -314,14 +314,16 @@
             }
 
             if (!users[username]) {
-                alert('Gebruiker niet gevonden! Gebruik Bob, Alice of Admin.');
+                alert('Gebruiker niet gevonden! Gebruik Alice, Bob of Carol.');
                 return;
             }
 
             currentUsername = username;
             
             // Genereer sessiesleutel (16 karakters random)
-            currentSessionKey = generateRandomKey(16);
+            const randomKey = generateRandomKey(16);
+            // Formatteer als "sessiesleutel: [key]" zoals in de opdracht
+            currentSessionKey = 'sessiesleutel: ' + randomKey;
             
             // Versleutel sessiesleutel met DES-ECB met wachtwoord-hash
             const userHash = users[username].hash;
